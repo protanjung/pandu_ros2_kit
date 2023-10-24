@@ -13,7 +13,7 @@ foreach(vardependency ${var_dependencies})
   find_package(${vardependency} REQUIRED)
 endforeach()
 
-add_library(pandu_ros2_kit src/help_marker.cpp)
+add_library(pandu_ros2_kit src/help_marker.cpp src/udp.cpp)
 ament_target_dependencies(pandu_ros2_kit ${var_dependencies})
 
 target_include_directories(

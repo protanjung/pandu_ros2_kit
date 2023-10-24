@@ -8,17 +8,19 @@
 #include "visualization_msgs/msg/marker.hpp"
 
 class HelpMarker {
- public:
+ private:
   //-----Node
   rclcpp::Node::SharedPtr _node;
   //-----Publisher
-  rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr pub_marker;
+  rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr _pub_marker;
 
-  bool is_initialized = false;
+  bool _is_initialized = false;
 
+ public:
   HelpMarker();
 
-  void init(rclcpp::Node::SharedPtr node);
+  bool init(rclcpp::Node::SharedPtr node);
+  bool is_initialized();
 
   void arrow(
       std::string frame_id,
