@@ -10,7 +10,7 @@ bool HelpMarker::init(rclcpp::Node::SharedPtr node) {
   // ----Node
   _node = node;
   // ----Publisher
-  _pub_marker = _node->create_publisher<visualization_msgs::msg::Marker>("marker", rclcpp::SensorDataQoS());
+  _pub_marker = _node->create_publisher<visualization_msgs::msg::Marker>("marker", 1);
 
   _is_initialized = true;
   return true;

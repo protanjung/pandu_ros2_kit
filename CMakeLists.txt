@@ -9,8 +9,8 @@ set(var_dependencies rclcpp geometry_msgs visualization_msgs)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-foreach(vardependency ${var_dependencies})
-  find_package(${vardependency} REQUIRED)
+foreach(dependency ${var_dependencies})
+  find_package(${dependency} REQUIRED)
 endforeach()
 
 add_library(pandu_ros2_kit src/help_marker.cpp src/udp.cpp)
