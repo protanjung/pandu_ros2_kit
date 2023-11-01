@@ -5,19 +5,27 @@
 #include "geometry_msgs/msg/quaternion.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/color_rgba.hpp"
-#include "visualization_msgs/msg/marker.hpp"
+#include "visualization_msgs/msg/marker_array.hpp"
+
+using namespace std::chrono_literals;
 
 class HelpMarker {
  private:
   //-----Node
   rclcpp::Node::SharedPtr _node;
+  //-----Timer
+  rclcpp::TimerBase::SharedPtr _tim_60hz;
   //-----Publisher
-  rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr _pub_marker;
+  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr _pub_marker_array;
 
   bool _is_initialized = false;
 
+  visualization_msgs::msg::MarkerArray _msg_marker_array;
+
  public:
   HelpMarker();
+
+  void cllbck_tim_60hz();
 
   bool init(rclcpp::Node::SharedPtr node);
   bool is_initialized();
