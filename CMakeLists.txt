@@ -5,7 +5,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-set(var_dependencies rclcpp geometry_msgs visualization_msgs)
+set(var_dependencies geometry_msgs rclcpp visualization_msgs)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
