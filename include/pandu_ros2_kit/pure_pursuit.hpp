@@ -36,6 +36,9 @@ class PurePursuit {
       float _look_ahead_distance);
   bool is_initialized();
 
+  void set_x_y_theta(float *x, float *y, float *theta);
+  void set_path(std::vector<geometry_msgs::msg::Point> *path);
+
   void update_all();
   void update_goal();
   void update_icr();

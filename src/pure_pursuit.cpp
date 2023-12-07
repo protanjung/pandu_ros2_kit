@@ -28,6 +28,16 @@ bool PurePursuit::is_initialized() { return _is_initialized; }
 
 //======================================
 
+void PurePursuit::set_x_y_theta(float *x, float *y, float *theta) {
+  _x = x;
+  _y = y;
+  _theta = theta;
+}
+
+void PurePursuit::set_path(std::vector<geometry_msgs::msg::Point> *path) { _path = path; }
+
+//======================================
+
 void PurePursuit::update_all() {
   if (!_is_initialized || _path->size() < 2) {
     goal_index_start = 0;
