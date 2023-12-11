@@ -58,7 +58,7 @@ void PurePursuit::update_all() {
 
 void PurePursuit::update_goal() {
   static uint8_t status_normal = 0;
-  static uint8_t index_normal = 1;
+  static uint32_t index_normal = 1;
 
   if (index_normal >= _path->size()) {
     status_normal = 0;
