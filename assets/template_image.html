@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJPEG Server</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+        main {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>MJPEG Server</h1>
+        <a href="/">Back to index</a>
+    </header>
+
+    <main>
+        <figure>
+            <img src="{{ image }}?scale={{ scale }}&quality={{ quality }}" alt="Image could not be loaded.">
+            <figcaption>
+                <a class="button" href="{{ image }}?scale=1.0&quality={{ quality }}">View full size</a>
+                <a class="button" href="{{ image }}?scale={{ scale }}&quality=100">View high quality</a>
+                <a class="button" href="{{ image }}?scale=1.0&quality=100">View full size and high quality</a>
+            </figcaption>
+
+        </figure>
+    </main>
+
+    <footer>
+        Pandu Surya Tantra | <a href="mailto:pandustantra@gmail.com">pandustantra@gmail.com</a>
+    </footer>
+</body>
+
+</html>

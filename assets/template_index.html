@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJPEG Server</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+        main {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>MJPEG Server</h1>
+    </header>
+
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Topic</th>
+                    <th>Stream</th>
+                    <th>Snapshot</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for topic in topics %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ topic }}</td>
+                    <td><a class="button" href="/image/stream{{ topic }}">Stream</a></td>
+                    <td><a class="button" href="/image/snapshot{{ topic }}">Snapshot</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        Pandu Surya Tantra | <a href="mailto:pandustantra@gmail.com">pandustantra@gmail.com</a>
+    </footer>
+</body>
+
+</html>
