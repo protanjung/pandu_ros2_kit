@@ -10,6 +10,7 @@ class IOVision : public rclcpp::Node {
     int camera_width;
     int camera_height;
     int camera_fps;
+    std::string rtsp_path;
     int output_width;
     int output_height;
     //----Publisher
@@ -33,12 +34,14 @@ class IOVision : public rclcpp::Node {
         this->declare_parameter("camera_width", 640);
         this->declare_parameter("camera_height", 480);
         this->declare_parameter("camera_fps", 30);
+        this->declare_parameter("rtsp_path", rclcpp::PARAMETER_STRING);
         this->declare_parameter("output_width", 640);
         this->declare_parameter("output_height", 480);
         this->get_parameter("camera_path", camera_path);
         this->get_parameter("camera_width", camera_width);
         this->get_parameter("camera_height", camera_height);
         this->get_parameter("camera_fps", camera_fps);
+        this->get_parameter("rtsp_path", rtsp_path);
         this->get_parameter("output_width", output_width);
         this->get_parameter("output_height", output_height);
         //----Publisher
@@ -64,33 +67,41 @@ class IOVision : public rclcpp::Node {
         logger.info("camera_width: %d", camera_width);
         logger.info("camera_height: %d", camera_height);
         logger.info("camera_fps: %d", camera_fps);
+        logger.info("rtsp_path: %s", rtsp_path.c_str());
         logger.info("output_width: %d", output_width);
         logger.info("output_height: %d", output_height);
 
-        if (!cap.open(camera_path, cv::CAP_V4L)) {
-            logger.error("Failed to open camera.");
-            rclcpp::shutdown();
-        }
+        if (rtsp_path != "") { // If using RTSP
+            if (!cap.open(rtsp_path, cv::CAP_FFMPEG)) {
+                logger.error("Failed to open RTSP.");
+                rclcpp::shutdown();
+            }
+        } else { // If using camera
+            if (!cap.open(camera_path, cv::CAP_V4L)) {
+                logger.error("Failed to open camera.");
+                rclcpp::shutdown();
+            }
 
-        int camera_fourcc = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
+            int camera_fourcc = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
 
-        cap.set(cv::CAP_PROP_FOURCC, camera_fourcc);
-        cap.set(cv::CAP_PROP_FRAME_WIDTH, camera_width);
-        cap.set(cv::CAP_PROP_FRAME_HEIGHT, camera_height);
-        cap.set(cv::CAP_PROP_FPS, camera_fps);
-        logger.info("Set camera fourcc code: %d", camera_fourcc);
-        logger.info("Set camera parameters: %dx%d %d fps", camera_width, camera_height, camera_fps);
+            cap.set(cv::CAP_PROP_FOURCC, camera_fourcc);
+            cap.set(cv::CAP_PROP_FRAME_WIDTH, camera_width);
+            cap.set(cv::CAP_PROP_FRAME_HEIGHT, camera_height);
+            cap.set(cv::CAP_PROP_FPS, camera_fps);
+            logger.info("Set camera fourcc code: %d", camera_fourcc);
+            logger.info("Set camera parameters: %dx%d %d fps", camera_width, camera_height, camera_fps);
 
-        int _fourcc = cap.get(cv::CAP_PROP_FOURCC);
-        int _width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
-        int _height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
-        int _fps = cap.get(cv::CAP_PROP_FPS);
-        logger.info("Get camera fourcc code: %d", _fourcc);
-        logger.info("Get camera parameters: %dx%d %d fps", _width, _height, _fps);
+            int _fourcc = cap.get(cv::CAP_PROP_FOURCC);
+            int _width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+            int _height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+            int _fps = cap.get(cv::CAP_PROP_FPS);
+            logger.info("Get camera fourcc code: %d", _fourcc);
+            logger.info("Get camera parameters: %dx%d %d fps", _width, _height, _fps);
 
-        if (_fourcc != camera_fourcc || _width != camera_width || _height != camera_height || _fps != camera_fps) {
-            logger.error("Failed to set camera parameters.");
-            rclcpp::shutdown();
+            if (_fourcc != camera_fourcc || _width != camera_width || _height != camera_height || _fps != camera_fps) {
+                logger.error("Failed to set camera parameters.");
+                rclcpp::shutdown();
+            }
         }
 
         while (rclcpp::ok()) {
@@ -107,6 +118,8 @@ class IOVision : public rclcpp::Node {
             auto msg_gray = cv_bridge::CvImage(std_msgs::msg::Header(), "mono8", frame_gray).toImageMsg();
             pub_image_gray->publish(*msg_gray);
         }
+
+        rclcpp::shutdown();
     }
 };
 
